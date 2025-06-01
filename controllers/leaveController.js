@@ -21,7 +21,7 @@ exports.applyLeave = async (req, res) => {
     res.status(201).json({ message: 'Leave applied successfully', leave });
   } catch (err) {
     console.error('error leave', err);
-    
+
     res.status(400).json({ error: 'Leave application failed' });
   }
 };
@@ -36,13 +36,13 @@ exports.getLeaves = async (req, res) => {
     // if (req.user.role === 'employee') {
     //   filter.employee = req.user.id;
     // } else {
-      // Admin or Manager can filter by employee, date range
-      if (employeeId) filter.employee = employeeId;
-      if (fromDate || toDate) {
-        filter.startDate = {};
-        if (fromDate) filter.startDate.$gte = new Date(fromDate);
-        if (toDate) filter.startDate.$lte = new Date(toDate);
-      }
+    // Admin or Manager can filter by employee, date range
+    if (employeeId) filter.employee = employeeId;
+    if (fromDate || toDate) {
+      filter.startDate = {};
+      if (fromDate) filter.startDate.$gte = new Date(fromDate);
+      if (toDate) filter.startDate.$lte = new Date(toDate);
+    }
     // }
 
     const leaves = await Leave.find(filter)
@@ -79,3 +79,22 @@ exports.updateLeaveStatus = async (req, res) => {
     res.status(400).json({ error: 'Failed to update leave status' });
   }
 };
+
+// Delete a user
+exports.deleteLeave = async (req, res) => {
+  try {
+    const leaveId = req.params.id;
+
+    const deletedLeave = await Leave.findByIdAndDelete(leaveId);
+
+    if (!deletedLeave) {
+      return res.status(404).json({ message: 'Leave not found' });
+    }
+
+    res.json({ message: 'Leave deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting leave:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
