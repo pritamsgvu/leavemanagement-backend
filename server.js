@@ -8,6 +8,7 @@ dotenv.config();
 const authRoutes = require('./routes/authRoutes');
 const leaveRoutes = require('./routes/leaveRoutes');
 const userRoutes = require('./routes/userRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/leaves', leaveRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/message', messageRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)
